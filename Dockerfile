@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:latest as builder
+FROM quay.io/keycloak/keycloak:22.0.1-0 as builder
 
 COPY keycloak-build.conf /conf/keycloak.conf
 
@@ -7,7 +7,7 @@ WORKDIR /opt/keycloak
 RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
 RUN /opt/keycloak/bin/kc.sh build
 
-FROM quay.io/keycloak/keycloak:latest
+FROM quay.io/keycloak/keycloak:22.0.1-0
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 COPY keycloak-run.conf /conf/keycloak.conf
 
